@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recetas Inactivas</title>
+
+    <!-- Bootstrap + Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body class="bg-light py-5">
+
+<div class="container">
+    <h1 class="text-center mb-4 fw-bold text-secondary"><i class="bi bi-eye-slash me-2"></i>Recetas Inactivas</h1>
+
+    <!-- Botones -->
+    <div class="d-flex justify-content-between mb-4">
+        <a href="/recetas-vista" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Volver al Listado Activo
+        </a>
+        <a href="/" class="btn btn-secondary">
+            <i class="bi bi-house-door-fill"></i> Inicio
+        </a>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-responsive shadow rounded-4">
+        <table class="table table-striped table-hover align-middle bg-white rounded-4 overflow-hidden">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Calorías Totales</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="receta : ${recetasInactivas}">
+                    <td th:text="${receta.nombre}">Nombre</td>
+                    <td th:text="${#numbers.formatDecimal(receta.caloriasTotales, 0, 'COMMA', 2, 'POINT')}">0.00</td>
+                    <td th:text="${receta.descripcion}">Descripción</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recetasInactivas)}">
+                    <td colspan="3" class="text-center text-muted py-4">
+                        <i class="bi bi-emoji-frown fs-4"></i><br>
+                        No hay recetas inactivas.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

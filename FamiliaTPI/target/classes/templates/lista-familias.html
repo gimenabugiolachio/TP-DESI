@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Familias</title>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body class="bg-light py-5">
+    <div th:if="${error}" class="alert alert-warning text-center fw-semibold" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${error}"></span>
+    </div>
+
+    <div class="container">
+        <h1 class="text-center mb-4 fw-bold">Listado de Familias Asistidas</h1>
+
+        <div class="d-flex justify-content-between mb-4">
+            <a href="/familias-vista/nueva" class="btn btn-success">
+                <i class="bi bi-person-plus-fill"></i> Registrar Nueva Familia
+            </a>
+            <a href="/" class="btn btn-secondary">
+                <i class="bi bi-house-door-fill"></i> Inicio
+            </a>
+        </div>
+
+        <!-- Filtros -->
+        <form class="row mb-4" method="get" th:action="@{/familias-vista/lista-familia}">
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="filtroNombre"
+                       placeholder="Buscar por nombre"
+                       th:value="${filtroNombre}">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control" name="filtroId"
+                       placeholder="Buscar por número de familia"
+                       th:value="${filtroId}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+			<div class="d-flex justify-content-end mt-2">
+			    <a href="/familias-vista/lista-familia" class="btn btn-outline-secondary btn-sm">
+			        <i class="bi bi-x-circle"></i> Limpiar Filtro
+			    </a>
+			</div>
+        </form>
+
+        <!-- Tabla -->
+        <div class="table-responsive shadow rounded-4">
+            <table class="table table-striped table-hover align-middle bg-white rounded-4 overflow-hidden">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Nro Familia</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Fecha Alta</th>
+                        <th scope="col">Última Asistencia</th>
+                        <th scope="col">Integrantes Activos</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+				<tbody>
+				    <tr th:each="familia : ${familias}">
+				        <td th:text="${familia.id}"></td>
+				        <td th:text="${familia.nombreFamilia}"></td>
+				        <td th:text="${#temporals.format(familia.fechaAlta, 'dd/MM/yyyy')}"></td>
+				        <td th:text="${familia.fechaUltimaAsistencia != null ? #temporals.format(familia.fechaUltimaAsistencia, 'dd/MM/yyyy') : 'Sin registro'}"></td>
+						<td th:text="${familia.nombresIntegrantesActivos != null and !familia.nombresIntegrantesActivos.isEmpty() 
+						              ? #strings.listJoin(familia.nombresIntegrantesActivos, ' - ') 
+						              : 'Sin integrantes'}">Sin integrantes</td>
+										        <td>
+				            <a th:href="@{'/familias-vista/editar/' + ${familia.id}}" class="btn btn-primary btn-sm me-2">
+				                <i class="bi bi-pencil-square"></i> Editar
+				            </a>
+				            <form th:action="@{'/familias-vista/eliminar/' + ${familia.id}}" method="post" class="d-inline">
+				                <button type="submit" class="btn btn-danger btn-sm">
+				                    <i class="bi bi-trash-fill"></i> Eliminar
+				                </button>
+				            </form>
+				        </td>
+				    </tr>
+
+				    <!-- MENSAJE SI LA LISTA ESTÁ VACÍA -->
+				    <tr th:if="${#lists.isEmpty(familias)}">
+				        <td colspan="6" class="text-center text-muted py-4">
+				            <i class="bi bi-emoji-frown fs-4"></i><br>
+				            No se encontraron familias con los criterios ingresados.
+				        </td>
+				    </tr>
+				</tbody>
+
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <a href="/familias-vista/familias-inactivas" class="btn btn-outline-secondary">
+                <i class="bi bi-eye-slash"></i> Ver Familias Inactivas
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

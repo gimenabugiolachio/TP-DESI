@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${familia.id != null} ? 'Editar Familia' : 'Registrar Familia'">Formulario Familia</title>
+
+    <!-- Bootstrap + Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center min-vh-100">
+
+    <div class="card shadow p-5 rounded-4" style="width: 100%; max-width: 600px;">
+        <h2 class="mb-4 text-center fw-bold"
+            th:text="${familia.id != null} ? 'Editar Familia' : 'Registrar Familia'">Formulario Familia</h2>
+
+        <form th:action="${familia.id != null} ? @{'/familias-vista/actualizar/' + ${familia.id}} : @{/familias-vista/guardar}"
+              th:object="${familia}" method="post" novalidate>
+
+            <!-- Nro de Familia (solo lectura) -->
+            <div class="mb-3">
+                <label for="id" class="form-label">Nro de Familia</label>
+                <input type="text" class="form-control" id="id" name="id" th:value="${familia.id}" readonly />
+            </div>
+
+            <!-- Nombre de la Familia -->
+            <div class="mb-3">
+                <label for="nombreFamilia" class="form-label fw-semibold">Nombre de la Familia</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text">
+                        <i class="bi bi-people-fill"
+                           th:classappend="${#fields.hasErrors('nombreFamilia')} ? 'text-danger'"></i>
+                    </span>
+                    <input type="text" id="nombreFamilia" class="form-control"
+                           th:field="*{nombreFamilia}"
+                           th:classappend="${#fields.hasErrors('nombreFamilia')} ? 'is-invalid'"
+                           placeholder="Ej: Pérez & Hijos" />
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('nombreFamilia')}"
+                         th:errors="*{nombreFamilia}"></div>
+                </div>
+            </div>
+
+            <!-- Dirección -->
+            <div class="mb-3">
+                <label for="direccion" class="form-label fw-semibold">Dirección</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text">
+                        <i class="bi bi-geo-alt-fill"
+                           th:classappend="${#fields.hasErrors('direccion')} ? 'text-danger'"></i>
+                    </span>
+                    <input type="text" id="direccion" class="form-control"
+                           th:field="*{direccion}"
+                           th:classappend="${#fields.hasErrors('direccion')} ? 'is-invalid'"
+                           placeholder="Ej: Av. Siempre Viva 742" />
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('direccion')}"
+                         th:errors="*{direccion}"></div>
+                </div>
+            </div>
+
+            <!-- Fecha de Alta -->
+            <div class="mb-4">
+                <label for="fechaAlta" class="form-label fw-semibold">Fecha de Alta</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                    <input type="date" id="fechaAlta" class="form-control"
+                           th:field="*{fechaAlta}"
+                           th:classappend="${#fields.hasErrors('fechaAlta')} ? 'is-invalid'" />
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('fechaAlta')}"
+                         th:errors="*{fechaAlta}"></div>
+                </div>
+            </div>
+            <!-- Botones -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success w-50 me-2">Guardar</button>
+                <button type="submit" name="action" value="cancelar" class="btn btn-secondary w-50 ms-2">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

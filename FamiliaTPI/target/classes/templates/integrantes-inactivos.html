@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Integrantes Inactivos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body class="bg-light p-4">
+
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4">Listado de Integrantes Inactivos</h2>
+
+        <div class="mb-3 text-end">
+            <a href="/" class="btn btn-secondary"><i class="bi bi-house-door"></i> Inicio</a>
+            <a href="/integrantes-vista/lista-integrantes" class="btn btn-primary"><i class="bi bi-arrow-left-circle"></i> Volver a Activos</a>
+        </div>
+		<div th:if="${#lists.isEmpty(integrantes)}" class="alert alert-info text-center fw-semibold">
+		           <i class="bi bi-info-circle-fill"></i> No hay integrantes inactivos registrados.
+		       </div>
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Ocupación</th>
+                    <th>Familia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="integrante : ${integrantes}">
+                    <td th:text="${integrante.id}">1</td>
+                    <td th:text="${integrante.dni}">12345678</td>
+                    <td th:text="${integrante.nombre}">Juan</td>
+                    <td th:text="${integrante.apellido}">Pérez</td>
+                    <td th:text="${#temporals.format(integrante.fechaNacimiento, 'dd/MM/yyyy')}">2000-01-01</td>
+                    <td th:text="${integrante.ocupacion}">Estudiante</td>
+                    <td th:text="${integrante.familia.nombreFamilia}">Familia Pérez</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
